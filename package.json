@@ -1,0 +1,32 @@
+{
+  "name": "clickysketch",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "ClickySketch - a screen-aware AI tutor you talk to (Milestone 2: voice, AI, pixel UI).",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@fontsource/pixelify-sans": "^5.2.0",
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-opener": "^2.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "roughjs": "^4.6.6",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0"
+  }
+}

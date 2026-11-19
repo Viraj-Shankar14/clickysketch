@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  color: var(--text);
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+/* Text the user may want to copy (chat messages, error details). */
+.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+/* The overlay: everything is click-through unless an element opts in with [data-hit]. */
+.overlay-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}

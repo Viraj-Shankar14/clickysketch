@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Permissions for the ClickySketch overlay windows (one per display).",
+  "windows": ["overlay-*"],
+  "permissions": ["core:default"]
+}

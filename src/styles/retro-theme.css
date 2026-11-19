@@ -1,0 +1,238 @@
+/*
+ * ClickySketch "Pixel Windows" design system. Every value is measured from the reference
+ * screenshots; see docs/DESIGN_ANALYSIS.md.
+ *
+ * The one trick everything is built on: a control is a plain box with a 2px box-shadow outline on each
+ * of its four sides. The four shadows never meet, so each corner loses a pixel, which is exactly the
+ * stepped corner of pixel-art UI. Two inset shadows on top make the bevel.
+ */
+:root {
+  --line: #4d4f55;
+  --face: #f2eff2;
+  --face-2: #e3e1e4;
+  --face-3: #dcdcdc;
+  --bubble: #dfdcdf;
+  --paper: #fbfafc;
+  --field: #f5f3f5;
+  --white: #ffffff;
+  --shade: #a6a3a6;
+
+  --blue: #679cfd;
+  --blue-hi: #a9d6fb;
+  --blue-lo: #2948e7;
+  --purple: #7271e3;
+  --purple-soft: #bfb4fd;
+  --purple-dark: #635fb2;
+  --green: #48cd4d;
+  --green-bubble: #84cc6a;
+  --green-tab: #4acf58;
+  --green-lo: #2c8f36;
+  --yellow: #fbc046;
+  --yellow-lo: #c98a12;
+  --red: #e8402b;
+  --red-lo: #a82a1b;
+  --red-knob: #d1170f;
+
+  --text: #474755;
+  --text-dim: #6f6f7c;
+  --text-faint: #b9b7b9;
+
+  --font-ui: "Pixelify Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
+}
+
+/* ---------- the pixel box ---------- */
+.px {
+  --c-line: var(--line);
+  --c-hi: #ffffff;
+  --c-lo: var(--shade);
+  --px-hi: var(--c-hi);
+  --px-lo: var(--c-lo);
+  box-shadow:
+    0 -2px 0 0 var(--c-line),
+    0 2px 0 0 var(--c-line),
+    -2px 0 0 0 var(--c-line),
+    2px 0 0 0 var(--c-line),
+    inset 2px 2px 0 0 var(--px-hi),
+    inset -2px -2px 0 0 var(--px-lo),
+    var(--px-drop, 0 0 0 0 transparent);
+}
+.px--sunken { --c-hi: var(--shade); --c-lo: #ffffff; }
+.px--flat { --c-hi: transparent; --c-lo: transparent; }
+.px--blue { --c-hi: var(--blue-hi); --c-lo: var(--blue-lo); }
+.px--green { --c-hi: #b9f0b9; --c-lo: var(--green-lo); }
+.px--yellow { --c-hi: #ffe7a6; --c-lo: var(--yellow-lo); }
+.px--red { --c-hi: #ff9b8c; --c-lo: var(--red-lo); }
+.px--purple { --c-hi: #c9c6ff; --c-lo: var(--purple-dark); }
+.px--pressed,
+.px.btn:active:not(:disabled) { --px-hi: var(--c-lo); --px-lo: var(--c-hi); }
+
+/* ---------- buttons ---------- */
+.btn {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 3px;
+  padding: 8px 16px 9px;
+  font: 400 16px/1 var(--font-ui);
+  color: var(--text);
+  background: var(--face-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  isolation: isolate;
+  user-select: none;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.55; cursor: default; }
+.btn:focus-visible { outline: 2px dashed var(--blue-lo); outline-offset: 4px; }
+.btn:active:not(:disabled) { transform: translateY(2px); }
+.btn--sm { padding: 5px 10px 6px; font-size: 14px; }
+.btn--icon { padding: 6px; }
+
+/* Glass: a translucent blue with a bright upper half and a soft blur of whatever is behind it. */
+.btn--glass,
+.glass {
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(26, 44, 170, 0.55);
+  -webkit-backdrop-filter: blur(6px) saturate(1.35);
+  backdrop-filter: blur(6px) saturate(1.35);
+}
+.btn--glass.px--blue,
+.glass.px--blue {
+  background: linear-gradient(180deg, rgba(150, 192, 255, 0.97) 0%, rgba(103, 156, 253, 0.92) 49%, rgba(74, 124, 246, 0.96) 52%, rgba(96, 146, 251, 0.96) 100%);
+}
+.btn--glass.px--green,
+.glass.px--green {
+  background: linear-gradient(180deg, rgba(150, 236, 150, 0.97) 0%, rgba(72, 205, 77, 0.92) 49%, rgba(52, 176, 62, 0.96) 52%, rgba(66, 196, 72, 0.96) 100%);
+  text-shadow: 0 1px 0 rgba(20, 90, 30, 0.55);
+}
+.btn--glass.px--red,
+.glass.px--red {
+  background: linear-gradient(180deg, rgba(255, 150, 130, 0.97) 0%, rgba(232, 64, 43, 0.93) 49%, rgba(200, 46, 28, 0.96) 52%, rgba(222, 58, 38, 0.96) 100%);
+  text-shadow: 0 1px 0 rgba(110, 20, 10, 0.55);
+}
+.btn--glass::before,
+.glass::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 2px;
+  height: calc(50% - 2px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.12));
+  pointer-events: none;
+  z-index: -1;
+}
+.btn--glass .pixel-icon { filter: drop-shadow(0 1px 0 rgba(26, 44, 170, 0.45)); }
+
+/* ---------- fields ---------- */
+.field {
+  display: block;
+  width: calc(100% - 6px);
+  margin: 3px;
+  padding: 9px 12px 10px;
+  font: 400 16px/1.2 var(--font-ui);
+  color: var(--text);
+  background: var(--field);
+  border: 0;
+  border-radius: 0;
+  outline: none;
+}
+.field::placeholder { color: var(--text-faint); }
+.field:focus { --c-line: var(--blue-lo); background: #ffffff; }
+.field:disabled { opacity: 0.6; }
+select.field {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 6 4' shape-rendering='crispEdges'><path fill='%234d4f55' d='M0 0h6v1H5v1H4v1H3v1H2V3H1V2H0z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+.field--mono { font-family: var(--font-mono); font-size: 14px; }
+
+/* ---------- checkbox ---------- */
+.check { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; color: var(--text); }
+.check__input { position: absolute; opacity: 0; width: 0; height: 0; }
+.check__box { width: 22px; height: 22px; margin: 3px; background: var(--field); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.check__box .pixel-icon { opacity: 0; }
+.check__input:checked + .check__box .pixel-icon { opacity: 1; }
+.check__input:focus-visible + .check__box { --c-line: var(--blue-lo); }
+.check__input:disabled + .check__box { opacity: 0.5; }
+
+/* ---------- slider ---------- */
+.slider { -webkit-appearance: none; appearance: none; width: calc(100% - 12px); height: 26px; margin: 0 6px; background: transparent; cursor: pointer; }
+.slider::-webkit-slider-runnable-track {
+  height: 8px;
+  background: var(--field);
+  box-shadow: 0 -2px 0 0 var(--line), 0 2px 0 0 var(--line), -2px 0 0 0 var(--line), 2px 0 0 0 var(--line), inset 2px 2px 0 0 var(--shade);
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 24px;
+  margin-top: -8px;
+  background: var(--red-knob);
+  box-shadow: 0 -2px 0 0 var(--line), 0 2px 0 0 var(--line), -2px 0 0 0 var(--line), 2px 0 0 0 var(--line), inset 2px 2px 0 0 #ff8f82, inset -2px -2px 0 0 #8d0b06;
+}
+.slider:focus-visible { outline: 2px dashed var(--blue-lo); outline-offset: 4px; }
+
+/* ---------- progress ---------- */
+.progress { height: 18px; margin: 3px; background: var(--field); position: relative; overflow: hidden; }
+.progress__fill { position: absolute; inset: 2px auto 2px 2px; background: repeating-linear-gradient(90deg, var(--green) 0 10px, #7be07f 10px 12px); transition: width 240ms steps(8); }
+
+/* ---------- keycap ---------- */
+.keycap { display: inline-block; margin: 0 3px; padding: 2px 7px 3px; font: 400 13px/1.1 var(--font-ui); color: var(--text); background: var(--face-2); }
+
+/* ---------- panel with a coloured caption tab (the idle-game panels) ---------- */
+.panel { position: relative; margin: 30px 4px 14px; padding: 26px 18px 16px; background: var(--face); }
+.panel__tab {
+  position: absolute;
+  left: 14px;
+  top: -18px;
+  padding: 5px 16px 6px;
+  font: 700 15px/1 var(--font-ui);
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.28);
+  background: var(--blue);
+}
+.panel__tab--green { background: var(--green-tab); }
+.panel__tab--yellow { background: var(--yellow); color: #5b4300; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35); }
+.panel__tab--red { background: var(--red); }
+.panel__tab--purple { background: var(--purple); }
+.panel__row { display: grid; grid-template-columns: 170px 1fr; gap: 6px 16px; align-items: center; margin: 8px 0; }
+.panel__row > label, .panel__label { color: var(--text); }
+.panel__hint { margin: 4px 3px 0; font-size: 13px; line-height: 1.35; color: var(--text-dim); }
+.panel__hint a { color: var(--blue-lo); }
+
+/* ---------- chat bubbles ---------- */
+.bubble { margin: 3px; padding: 9px 14px 10px; background: var(--bubble); color: var(--text); font-size: 16px; line-height: 1.35; white-space: pre-wrap; overflow-wrap: anywhere; }
+.bubble--user { background: var(--green-bubble); }
+.bubble--error { background: #ffd9d3; }
+.bubble--note { background: #fff3c4; }
+.typing { display: inline-flex; gap: 7px; padding: 14px 16px; }
+.typing i { width: 8px; height: 8px; background: var(--shade); animation: typing-dot 1.2s infinite steps(1, end); }
+.typing i:nth-child(2) { animation-delay: 0.2s; }
+.typing i:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing-dot { 0%, 100% { background: var(--shade); } 20%, 60% { background: var(--text-faint); } 40% { background: var(--text); } }
+
+/* ---------- scrollbars ---------- */
+::-webkit-scrollbar { width: 18px; height: 18px; }
+::-webkit-scrollbar-track { background: var(--face-2); box-shadow: inset 2px 0 0 var(--shade), inset -2px 0 0 #fff; }
+::-webkit-scrollbar-thumb { background: var(--face); box-shadow: 0 0 0 2px var(--line), inset 2px 2px 0 0 #fff, inset -2px -2px 0 0 var(--shade); margin: 2px; }
+::-webkit-scrollbar-corner { background: var(--face-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .typing i { animation: none; }
+  .progress__fill { transition: none; }
+}
+
+/* Solid-tone buttons without glass */
+.btn.px--blue:not(.btn--glass) { background: var(--blue); color: #fff; text-shadow: 0 1px 0 rgba(26, 44, 170, 0.5); }
+.btn.px--green:not(.btn--glass) { background: var(--green); color: #fff; text-shadow: 0 1px 0 rgba(20, 90, 30, 0.5); }
+.btn.px--red:not(.btn--glass) { background: var(--red); color: #fff; text-shadow: 0 1px 0 rgba(110, 20, 10, 0.5); }
